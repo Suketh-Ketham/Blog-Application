@@ -1,9 +1,137 @@
-Blog App Project A full-stack MERN blog application with role-based access, protected routes, Cloudinary image uploads, and admin management.
+# Blog App
 
-Features Role-based authentication: USER, AUTHOR, ADMIN Registration and login for all users JWT-based authentication stored in httpOnly cookies Author dashboard Create articles Edit articles Soft delete / restore articles View own articles User dashboard View active articles Read article details Add comments to articles Admin dashboard View all users Block / unblock users View all articles Activate / deactivate articles Dashboard statistics Cloudinary profile image uploads for user and author registration Protected API routes with role validation MongoDB data models for users and articles Tech Stack Backend
+A full-stack MERN blog application with separate backend and frontend projects. The app supports user and author roles, authentication, article creation, editing, soft delete/restore, article comments, and image upload via Cloudinary.
 
-Node.js Express MongoDB / Mongoose JSON Web Tokens bcryptjs Cloudinary Multer cookie-parser cors Frontend
+## Project Structure
 
-React Vite Tailwind CSS Axios Zustand React Router react-hook-form react-hot-toast Project Structure backend/ server.js models/ APIs/ middlewares/ config/ services/ frontend/ src/ components/ store/ styles/ assets/ Setup Backend Open terminal in backend/ Install dependencies: npm install Create a .env file: DB_URL= PORT=4000 JWT_SECRET= CLOUDINARY_CLOUD_NAME= CLOUDINARY_API_KEY= CLOUDINARY_API_SECRET= Start the server: node server.js Frontend Open terminal in frontend/ Install dependencies: npm install Start development server: npm run dev API Endpoints Auth / Common POST /common-api/login GET /common-api/logout PUT /common-api/change-password GET /common-api/check-auth User POST /user-api/users GET /user-api/articles PUT /user-api/articles GET /user-api/article/:id Author POST /author-api/users POST /author-api/articles GET /author-api/articles/:authorId PUT /author-api/articles PATCH /author-api/articles/:id/status Admin GET /admin-api/articles GET /admin-api/users PUT /admin-api/users/block/:userId PUT /admin-api/users/unblock/:userId PUT /admin-api/articles/activate/:articleId PUT /admin-api/articles/deactivate/:articleId GET /admin-api/dashboard/stats Notes The backend uses cookie-based JWT authentication, so requests from the frontend must include credentials. Frontend CORS is configured for: http://localhost:5173 https://blog-app-project-eight.vercel.app Recommended Workflow Register a user, author, or admin Login Use the correct role-specific routes Manage articles and comments from UI dashboards Admin can manage users and content globally Contributions Feel free to extend this project with:
+- `blog backend/` - Express + MongoDB backend
+- `blog frontend/` - React + Vite frontend
 
-better validation pagination article categories and tags search and filter UI improvements deployment scripts
+## Features
+
+- Role-based authentication for `USER`, `AUTHOR`, and `ADMIN`
+- User registration and login
+- Author registration and profile creation with profile image upload
+- Create, edit, delete, and restore articles for authors
+- Browse and read active articles for users
+- View article details with author info and comments
+- Post comments on articles as authenticated users
+- Protected routes in React using role-based access control
+- Backend cookie-based auth for secure session handling
+- Cloudinary image upload support for profile images
+
+## Backend
+
+### Technologies
+
+- Node.js
+- Express
+- MongoDB / Mongoose
+- JSON Web Tokens
+- bcryptjs
+- dotenv
+- multer
+- Cloudinary
+- cookie-parser
+- nodemon
+
+### Start Backend
+
+1. Open `blog backend/`
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env` file with at least:
+
+```env
+DB_URL=<your-mongodb-connection-string>
+FRONTEND_URL=http://localhost:5173
+PORT=4000
+NODE_ENV=development
+```
+
+4. Run the backend:
+
+```bash
+npm run dev
+```
+
+The server listens on `http://localhost:4000` by default.
+
+### Backend API Routes
+
+- `POST /common-api/login` - login and set auth cookie
+- `GET /common-api/logout` - clear auth cookie
+- `GET /common-api/check-auth` - verify current user session
+- `POST /user-api/users` - register a new user
+- `GET /user-api/articles` - list active articles for users
+- `GET /user-api/article/:id` - get article details
+- `POST /user-api/comment/:articleId` - add comment to an article
+- `POST /author-api/users` - register a new author
+- `GET /author-api/articles/:authorId` - list author articles
+- `POST /author-api/article` - create a new article
+- `GET /author-api/article/:id` - get author article
+- `PUT /author-api/article/:id` - update an article
+- `DELETE /author-api/article/:id` - soft delete an article
+- `PUT /author-api/article/:id/restore` - restore a deleted article
+
+## Frontend
+
+### Technologies
+
+- React
+- Vite
+- React Router
+- Zustand
+- Axios
+- React Hook Form
+- React Hot Toast
+- Tailwind CSS
+
+### Start Frontend
+
+1. Open `blog frontend/`
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env` file with:
+
+```env
+VITE_API_BASE_URL=https://blog-application-qlfs.onrender.com
+```
+
+4. Run the frontend:
+
+```bash
+npm run dev
+```
+
+The app runs by default on `https://blog-application-gb7e.vercel.app/`.
+
+## Available Pages
+
+- `/` - Home page with article listings for users
+- `/register` - Registration page for users/authors
+- `/login` - Login page
+- `/user-profile` - User dashboard (protected)
+- `/author-profile` - Author dashboard (protected)
+- `/author-profile/articles` - Author articles list
+- `/author-profile/write-article` - Create new article
+- `/article/:id` - Article detail page
+- `/edit-article/:id` - Edit article page (author only)
+
+## Notes
+
+- The frontend uses a centralized `apiClient` for API calls with `axios` and cookies enabled.
+- `ProtectedRoute` enforces authentication and role-based access before allowing route access.
+- The backend uses an Express middleware to allow cross-origin requests from allowed frontend origins.
+
+## License
+
+This project is provided as-is for learning and development purposes.
